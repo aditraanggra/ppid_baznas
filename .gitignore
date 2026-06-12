@@ -1,0 +1,48 @@
+# Dependencies
+node_modules/
+.pnpm-store/
+
+# Environment files — NEVER commit these
+.env
+.env.local
+.env.production
+.env.*.local
+
+# Next.js
+apps/web/.next/
+apps/web/out/
+
+# Payload CMS build
+apps/cms/dist/
+apps/cms/.next/
+
+# Build outputs
+dist/
+build/
+
+# Turbo cache
+.turbo/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+npm-debug.log*
+pnpm-debug.log*
+
+# Docker volumes (local dev)
+postgres_data/
+minio_data/
+
+# IDE
+.vscode/settings.json
+.idea/
+
+# Testing
+coverage/
+
+#MISC
+ppid-baznas-cianjur-starter.zip
+opencode.json

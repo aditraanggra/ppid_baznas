@@ -1,0 +1,17 @@
+{
+  "name": "@ppid/config",
+  "version": "0.1.0",
+  "private": true,
+  "files": ["eslint", "tailwind", "typescript"],
+  "exports": {
+    "./tailwind":          "./tailwind/index.ts",
+    "./eslint":            "./eslint/index.js",
+    "./typescript/base":   "./typescript/base.json",
+    "./typescript/nextjs": "./typescript/nextjs.json"
+  },
+  "devDependencies": {
+    "tailwindcss":              "^3.4.0",
+    "tailwindcss-animate":      "^1.0.7",
+    "typescript":               "^5.4.0"
+  }
+}

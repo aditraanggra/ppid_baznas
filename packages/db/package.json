@@ -1,0 +1,25 @@
+{
+  "name": "@ppid/db",
+  "version": "0.1.0",
+  "private": true,
+  "main": "./src/index.ts",
+  "scripts": {
+    "migrate": "tsx --env-file=../../.env.local ./src/scripts/migrate.ts",
+    "generate": "drizzle-kit generate --config=drizzle.config.ts",
+    "studio": "drizzle-kit studio --config=drizzle.config.ts",
+    "seed": "tsx --env-file=../../.env.local ./src/scripts/seed.ts"
+  },
+  "dependencies": {
+    "drizzle-orm": "^0.31.0",
+    "postgres": "^3.4.0",
+    "zod": "^3.23.0",
+    "bcryptjs": "^2.4.3"
+  },
+  "devDependencies": {
+    "drizzle-kit": "^0.22.0",
+    "typescript": "^5.4.0",
+    "tsx": "^4.7.0",
+    "@types/node": "^20.0.0",
+    "@types/bcryptjs": "^2.4.6"
+  }
+}

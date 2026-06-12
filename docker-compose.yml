@@ -1,0 +1,63 @@
+# Docker Compose — Development
+# Usage: docker compose up -d
+version: '3.9'
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: ppid_postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ppid_baznas
+      POSTGRES_USER: ppid_user
+      POSTGRES_PASSWORD: dev_password_change_in_prod
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ppid_user -d ppid_baznas"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  minio:
+    image: minio/minio:latest
+    container_name: ppid_minio
+    restart: unless-stopped
+    command: server /data --console-address ":9001"
+    environment:
+      MINIO_ROOT_USER: minio_access_key
+      MINIO_ROOT_PASSWORD: minio_secret_key_change_in_prod
+    ports:
+      - "9000:9000"   # API
+      - "9001:9001"   # Console UI
+    volumes:
+      - minio_data:/data
+    healthcheck:
+      test: ["CMD", "mc", "ready", "local"]
+      interval: 30s
+      timeout: 20s
+      retries: 3
+
+  # Next.js app (web) — uncomment for full containerized dev
+  # web:
+  #   build: ./apps/web
+  #   ports:
+  #     - "3000:3000"
+  #   depends_on:
+  #     postgres:
+  #       condition: service_healthy
+
+  # Payload CMS — uncomment for full containerized dev
+  # cms:
+  #   build: ./apps/cms
+  #   ports:
+  #     - "3001:3001"
+  #   depends_on:
+  #     postgres:
+  #       condition: service_healthy
+
+volumes:
+  postgres_data:
+  minio_data:
