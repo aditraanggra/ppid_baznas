@@ -46,3 +46,13 @@ coverage/
 #MISC
 ppid-baznas-cianjur-starter.zip
 opencode.json
+
+.agents/
+
+skills-lock.json
+
+.impeccable/
+
+.opencode/
+
+DESIGN.md

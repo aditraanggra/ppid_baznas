@@ -6,7 +6,14 @@ export const roleEnum = pgEnum('user_role', [
   'operator',     // View only + status update
 ])
 
-export const users = pgTable('users', {
+/**
+ * NOTE: Table name is `admin_users` (NOT `users`) to avoid collision with the
+ * Payload CMS `users` table that already exists in the same PostgreSQL schema.
+ * Payload manages its own auth (hash + salt); Drizzle manages PPID admin auth
+ * (bcrypt + role). Keeping them on separate tables prevents the
+ * `CREATE TABLE IF NOT EXISTS` silent-skip problem.
+ */
+export const users = pgTable('admin_users', {
   id:        uuid('id').defaultRandom().primaryKey(),
   name:      varchar('name', { length: 100 }).notNull(),
   email:     varchar('email', { length: 255 }).notNull().unique(),

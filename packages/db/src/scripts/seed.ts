@@ -7,7 +7,7 @@ import { eq } from 'drizzle-orm'
 /**
  * Seed the database with a default super_admin user.
  * Credentials are read from env so they are never hardcoded:
- *   - SEED_ADMIN_EMAIL    (default: admin@baznas-cianjur.or.id)
+ *   - SEED_ADMIN_EMAIL    (default: ppid@baznaskabcianjur.com)
  *   - SEED_ADMIN_PASSWORD (required — abort if missing)
  *   - SEED_ADMIN_NAME     (default: Super Admin PPID)
  *
@@ -26,7 +26,7 @@ async function main(): Promise<void> {
     process.exit(1)
   }
 
-  const email = process.env.SEED_ADMIN_EMAIL ?? 'admin@baznas-cianjur.or.id'
+  const email = process.env.SEED_ADMIN_EMAIL ?? 'ppid@baznaskabcianjur.com'
   const name  = process.env.SEED_ADMIN_NAME  ?? 'Super Admin PPID'
 
   const client = postgres(url, { max: 1 })

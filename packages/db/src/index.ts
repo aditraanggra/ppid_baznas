@@ -1,14 +1,16 @@
 export * from './schema/users'
 export * from './schema/permohonan'
 export * from './schema/riwayat'
+export * from './schema/pengaduan'
 
 import { drizzle } from 'drizzle-orm/postgres-js'
 import postgres from 'postgres'
 import * as usersSchema from './schema/users'
 import * as permohonanSchema from './schema/permohonan'
 import * as riwayatSchema from './schema/riwayat'
+import * as pengaduanSchema from './schema/pengaduan'
 
-const schema = { ...usersSchema, ...permohonanSchema, ...riwayatSchema }
+const schema = { ...usersSchema, ...permohonanSchema, ...riwayatSchema, ...pengaduanSchema }
 
 const connectionString = process.env.DATABASE_URL!
 

@@ -22,7 +22,7 @@ declare module 'next-auth' {
   }
 }
 
-declare module 'next-auth/jwt' {
+declare module '@auth/core/jwt' {
   interface JWT {
     id:   string
     role: UserRole
@@ -47,7 +47,7 @@ const credentialsSchema = z.object({
  *   - `signOut`  → server action for logout
  *   - `handlers` → mount in app/api/auth/[...nextauth]/route.ts
  */
-export const { auth, signIn, signOut, handlers } = NextAuth({
+const nextAuth = NextAuth({
   session: { strategy: 'jwt', maxAge: 60 * 60 * 8 /* 8h */ },
   pages: {
     signIn: '/admin/login',
@@ -112,3 +112,8 @@ export const { auth, signIn, signOut, handlers } = NextAuth({
   },
   trustHost: true,
 })
+
+export const auth: typeof nextAuth.auth = nextAuth.auth
+export const signIn: typeof nextAuth.signIn = nextAuth.signIn
+export const signOut: typeof nextAuth.signOut = nextAuth.signOut
+export const handlers: typeof nextAuth.handlers = nextAuth.handlers

@@ -26,6 +26,8 @@ export const SiteSettings: GlobalConfig = {
         { name: 'instagram', type: 'text' },
         { name: 'youtube',   type: 'text' },
         { name: 'tiktok',    type: 'text' },
+        { name: 'x',         type: 'text' },
+        { name: 'website',   type: 'text' },
       ],
     },
     {

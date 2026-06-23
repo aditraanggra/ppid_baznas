@@ -37,10 +37,15 @@ export const permohonanRouter = router({
     .mutation(async ({ input }) => {
       const nomorTiket = await generateNomorTiket()
 
-      const [created] = await db
+      const createdRows = await db
         .insert(permohonan)
         .values({ ...input, nomorTiket, status: 'pending' })
         .returning()
+
+      const created = createdRows[0]
+      if (!created) {
+        throw new TRPCError({ code: 'INTERNAL_SERVER_ERROR', message: 'Gagal membuat permohonan.' })
+      }
 
       // Initial audit-log entry — null -> pending
       await db.insert(riwayatPermohonan).values({
@@ -69,7 +74,7 @@ export const permohonanRouter = router({
   cekStatus: publicProcedure
     .input(cekStatusSchema)
     .query(async ({ input }) => {
-      const [row] = await db
+      const rows = await db
         .select({
           id:                  permohonan.id,
           nomorTiket:          permohonan.nomorTiket,
@@ -88,6 +93,8 @@ export const permohonanRouter = router({
         .from(permohonan)
         .where(eq(permohonan.nomorTiket, input.nomorTiket))
         .limit(1)
+
+      const row = rows[0]
 
       // Use generic message so we do not leak whether the ticket exists.
       if (!row || row.emailHash.toLowerCase() !== input.email.toLowerCase()) {

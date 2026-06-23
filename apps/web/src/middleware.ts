@@ -1,4 +1,4 @@
-import { NextResponse } from 'next/server'
+import { NextResponse, type NextRequest } from 'next/server'
 import { auth } from '@/lib/auth'
 
 /**
@@ -13,9 +13,8 @@ import { auth } from '@/lib/auth'
  * Unauthenticated users hitting /admin/* are redirected to /admin/login
  * with a `?callbackUrl=` so they return to the original page after login.
  */
-export default auth((req) => {
-  const { pathname } = req.nextUrl
-  const session      = req.auth
+export default async function middleware(request: NextRequest) {
+  const { pathname } = request.nextUrl
 
   // Public routes: pass through immediately
   if (!pathname.startsWith('/admin')) return NextResponse.next()
@@ -23,20 +22,22 @@ export default auth((req) => {
   // Login page is always reachable
   if (pathname === '/admin/login') return NextResponse.next()
 
+  const session = await auth()
+
   // Require auth on every other /admin route
   if (!session?.user) {
-    const loginUrl = new URL('/admin/login', req.nextUrl.origin)
+    const loginUrl = new URL('/admin/login', request.nextUrl.origin)
     loginUrl.searchParams.set('callbackUrl', pathname)
     return NextResponse.redirect(loginUrl)
   }
 
   // Super-admin-only sub-tree
   if (pathname.startsWith('/admin/pengguna') && session.user.role !== 'super_admin') {
-    return NextResponse.redirect(new URL('/admin', req.nextUrl.origin))
+    return NextResponse.redirect(new URL('/admin', request.nextUrl.origin))
   }
 
   return NextResponse.next()
-})
+}
 
 /**
  * Matcher: run middleware on /admin/* only, skip Next internals and static assets.

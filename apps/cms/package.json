@@ -2,25 +2,33 @@
   "name": "@ppid/cms",
   "version": "0.1.0",
   "private": true,
+  "type": "module",
   "scripts": {
-    "dev": "payload dev",
-    "build": "payload build",
-    "start": "node dist/server.js",
-    "generate:types": "payload generate:types"
+    "dev": "cross-env NODE_OPTIONS=--no-deprecation next dev -p 3001",
+    "build": "cross-env NODE_OPTIONS=--no-deprecation next build",
+    "start": "cross-env NODE_OPTIONS=--no-deprecation next start -p 3001",
+    "generate:importmap": "cross-env NODE_OPTIONS=--no-deprecation payload generate:importmap",
+    "generate:types": "cross-env NODE_OPTIONS=--no-deprecation payload generate:types"
   },
   "dependencies": {
-    "payload": "^3.0.0",
     "@payloadcms/db-postgres": "^3.0.0",
+    "@payloadcms/next": "^3.0.0",
     "@payloadcms/richtext-lexical": "^3.0.0",
     "@payloadcms/storage-s3": "^3.0.0",
-    "@payloadcms/next": "^3.0.0",
-    "next": "14.2.0",
-    "react": "^18.3.0",
-    "react-dom": "^18.3.0",
-    "@ppid/db": "workspace:*"
+    "@payloadcms/ui": "^3.0.0",
+    "@ppid/db": "workspace:*",
+    "cross-env": "^7.0.3",
+    "graphql": "^16.8.1",
+    "next": "15.3.9",
+    "payload": "^3.0.0",
+    "react": "^19.2.7",
+    "react-dom": "^19.2.7",
+    "sharp": "^0.33.0"
   },
   "devDependencies": {
-    "typescript": "^5.4.0",
-    "@types/node": "^20.0.0"
+    "@types/node": "^20.0.0",
+    "@types/react": "^19.0.0",
+    "@types/react-dom": "^19.0.0",
+    "typescript": "^5.4.0"
   }
 }

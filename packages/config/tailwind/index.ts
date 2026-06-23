@@ -22,23 +22,39 @@ const preset: Partial<Config> = {
         secondary: { DEFAULT: '#1a5276' },
         accent:    { DEFAULT: '#fdc727' },
         surface:   '#f5f5f5',
-        border:    '#dddddd',
+        border:    '#e5e7eb',
         muted: {
           DEFAULT:    '#f5f5f5',
-          foreground: '#4a4a4a',
+          foreground: '#6b7280',
         },
-        foreground: '#1a1a1a',
+        foreground: '#111827',
         background: '#ffffff',
-        destructive: {
-          DEFAULT:    '#dc2626',
+        success: {
+          DEFAULT:    '#10b981',
           foreground: '#ffffff',
+          light:      '#d1fae5',
+        },
+        info: {
+          DEFAULT:    '#3b82f6',
+          foreground: '#ffffff',
+          light:      '#dbeafe',
+        },
+        warning: {
+          DEFAULT:    '#f59e0b',
+          foreground: '#ffffff',
+          light:      '#fef3c7',
+        },
+        destructive: {
+          DEFAULT:    '#ef4444',
+          foreground: '#ffffff',
+          light:      '#fee2e2',
         },
         ring:  '#259148',
-        input: '#dddddd',
+        input: '#e5e7eb',
       },
       fontFamily: {
-        sans:    ['var(--font-inter)',    'Inter',             'system-ui', 'sans-serif'],
-        heading: ['var(--font-jakarta)',  'Plus Jakarta Sans', 'system-ui', 'sans-serif'],
+        sans:    ['var(--font-inter)', 'Inter',    'system-ui', 'sans-serif'],
+        heading: ['var(--font-outfit)', 'Outfit', 'system-ui', 'sans-serif'],
       },
       borderRadius: {
         lg: '0.75rem',

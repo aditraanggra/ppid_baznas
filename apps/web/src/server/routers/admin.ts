@@ -2,7 +2,7 @@ import { router, adminProcedure } from '../trpc'
 import { TRPCError } from '@trpc/server'
 import { z } from 'zod'
 import { and, desc, eq, ilike, or, sql } from 'drizzle-orm'
-import { db, permohonan, riwayatPermohonan, type StatusPermohonan } from '@ppid/db'
+import { db, permohonan, riwayatPermohonan, pengaduan, type StatusPermohonan, type StatusPengaduan } from '@ppid/db'
 import { calculateDeadline, calculatePerpanjangan } from '@/lib/sla'
 
 const statusEnum = z.enum([
@@ -58,10 +58,13 @@ export const adminRouter = router({
           : undefined,
       )
 
-      const [{ total }] = await db
+      const totalResult = await db
         .select({ total: sql<number>`count(*)::int` })
         .from(permohonan)
         .where(where)
+        .limit(1)
+
+      const total = totalResult[0]?.total ?? 0
 
       const rows = await db
         .select()
@@ -149,11 +152,16 @@ export const adminRouter = router({
         patch.tanggalSelesai = now
       }
 
-      const [updated] = await db
+      const updatedRows = await db
         .update(permohonan)
         .set(patch)
         .where(eq(permohonan.id, input.id))
         .returning()
+
+      const updated = updatedRows[0]
+      if (!updated) {
+        throw new TRPCError({ code: 'INTERNAL_SERVER_ERROR', message: 'Gagal memperbarui status.' })
+      }
 
       await db.insert(riwayatPermohonan).values({
         permohonanId: updated.id,
@@ -162,6 +170,144 @@ export const adminRouter = router({
         catatan:      input.catatan ?? input.alasanTolak ?? null,
         userId:       ctx.session.user.id,
       })
+
+      return updated
+    }),
+
+  /**
+   * Upload lampiran jawaban (response document) to a permohonan.
+   * Stores the MinIO object key in permohonan.lampiranJawaban.
+   */
+  uploadJawaban: adminProcedure
+    .input(
+      z.object({
+        id:              z.string().uuid(),
+        lampiranJawaban: z.string().max(500),
+      }),
+    )
+    .mutation(async ({ input }) => {
+      const updatedRows = await db
+        .update(permohonan)
+        .set({ lampiranJawaban: input.lampiranJawaban, updatedAt: new Date() })
+        .where(eq(permohonan.id, input.id))
+        .returning()
+
+      const updated = updatedRows[0]
+      if (!updated) {
+        throw new TRPCError({ code: 'NOT_FOUND', message: 'Permohonan tidak ditemukan.' })
+      }
+
+      return updated
+    }),
+
+  /**
+   * Paginated, filterable list of pengaduan.
+   * Search matches nomorTiket OR nama (case-insensitive).
+   */
+  listPengaduan: adminProcedure
+    .input(
+      z.object({
+        page:     z.number().int().min(1).default(1),
+        pageSize: z.number().int().min(5).max(100).default(20),
+        status:   z.enum(['pending', 'diproses', 'ditindaklanjuti', 'selesai']).optional(),
+        search:   z.string().trim().max(100).optional(),
+      }),
+    )
+    .query(async ({ input }) => {
+      const { page, pageSize, status, search } = input
+
+      const where = and(
+        status ? eq(pengaduan.status, status) : undefined,
+        search
+          ? or(
+              ilike(pengaduan.nomorTiket, `%${search}%`),
+              ilike(pengaduan.nama, `%${search}%`),
+            )
+          : undefined,
+      )
+
+      const totalResult = await db
+        .select({ total: sql<number>`count(*)::int` })
+        .from(pengaduan)
+        .where(where)
+        .limit(1)
+
+      const total = totalResult[0]?.total ?? 0
+
+      const rows = await db
+        .select()
+        .from(pengaduan)
+        .where(where)
+        .orderBy(desc(pengaduan.createdAt))
+        .limit(pageSize)
+        .offset((page - 1) * pageSize)
+
+      return {
+        rows,
+        pagination: {
+          page,
+          pageSize,
+          total,
+          totalPages: Math.max(1, Math.ceil(total / pageSize)),
+        },
+      }
+    }),
+
+  /**
+   * Detail view: a single pengaduan.
+   */
+  getPengaduan: adminProcedure
+    .input(z.object({ id: z.string().uuid() }))
+    .query(async ({ input }) => {
+      const [row] = await db
+        .select()
+        .from(pengaduan)
+        .where(eq(pengaduan.id, input.id))
+        .limit(1)
+
+      if (!row) {
+        throw new TRPCError({ code: 'NOT_FOUND', message: 'Pengaduan tidak ditemukan.' })
+      }
+
+      return row
+    }),
+
+  /**
+   * Update status of a pengaduan.
+   */
+  updateStatusPengaduan: adminProcedure
+    .input(
+      z.object({
+        id:          z.string().uuid(),
+        toStatus:    z.enum(['pending', 'diproses', 'ditindaklanjuti', 'selesai']),
+        catatanAdmin: z.string().max(1000).optional(),
+      }),
+    )
+    .mutation(async ({ input }) => {
+      const [current] = await db
+        .select()
+        .from(pengaduan)
+        .where(eq(pengaduan.id, input.id))
+        .limit(1)
+
+      if (!current) {
+        throw new TRPCError({ code: 'NOT_FOUND', message: 'Pengaduan tidak ditemukan.' })
+      }
+
+      const updatedRows = await db
+        .update(pengaduan)
+        .set({
+          status: input.toStatus as StatusPengaduan,
+          catatanAdmin: input.catatanAdmin ?? current.catatanAdmin,
+          updatedAt: new Date(),
+        })
+        .where(eq(pengaduan.id, input.id))
+        .returning()
+
+      const updated = updatedRows[0]
+      if (!updated) {
+        throw new TRPCError({ code: 'INTERNAL_SERVER_ERROR', message: 'Gagal memperbarui status pengaduan.' })
+      }
 
       return updated
     }),

@@ -387,37 +387,37 @@ Agent MUST follow this order. Do NOT jump phases.
 
 ### Phase 2 — Public Frontend (MVP)
 
-- [ ] `TASK-011` Global layout: Navbar, Footer, responsive shell
-- [ ] `TASK-012` Beranda page with statistics section
-- [ ] `TASK-013` Profil PPID pages (static + CMS-driven)
-- [ ] `TASK-014` Daftar Informasi Publik with search & filter
-- [ ] `TASK-015` Form Permohonan multi-step (4 steps) with file upload
-- [ ] `TASK-016` Permohonan submission tRPC mutation + email confirmation
-- [ ] `TASK-017` Tracking permohonan by nomor tiket
-- [ ] `TASK-018` Download Center with kategori filter
-- [ ] `TASK-019` Statistik publik with Recharts charts
-- [ ] `TASK-020` Pengumuman list & detail pages (from Payload CMS)
-- [ ] `TASK-021` FAQ accordion page (from Payload CMS)
-- [ ] `TASK-022` Kontak page with map embed
+- [x] `TASK-011` Global layout: Navbar, Footer, responsive shell
+- [x] `TASK-012` Beranda page with statistics section (real data from tRPC)
+- [x] `TASK-013` Profil PPID pages (static + CMS-driven)
+- [x] `TASK-014` Daftar Informasi Publik with search & filter
+- [x] `TASK-015` Form Permohonan multi-step (4 steps) with file upload
+- [x] `TASK-016` Permohonan submission tRPC mutation + email confirmation
+- [x] `TASK-017` Tracking permohonan by nomor tiket (page + UI)
+- [x] `TASK-018` Download Center with kategori filter
+- [x] `TASK-019` Statistik publik with Recharts charts
+- [x] `TASK-020` Pengumuman list & detail pages (from Payload CMS)
+- [x] `TASK-021` FAQ accordion page (from Payload CMS)
+- [x] `TASK-022` Kontak page with map embed
 
 ### Phase 3 — Admin Dashboard (MVP)
 
-- [ ] `TASK-023` Admin layout with sidebar navigation
-- [ ] `TASK-024` Dashboard overview: stats cards + permohonan trend chart
-- [ ] `TASK-025` Permohonan table: filter, sort, pagination, search
-- [ ] `TASK-026` Permohonan detail: view, update status, upload jawaban, catatan
-- [ ] `TASK-027` SLA reminder cron job (vercel cron or node-cron)
-- [ ] `TASK-028` Laporan generator: PDF (react-pdf) + Excel (exceljs)
-- [ ] `TASK-029` User management CRUD (super_admin only)
+- [x] `TASK-023` Admin layout with sidebar navigation
+- [x] `TASK-024` Dashboard overview: stats cards + permohonan trend chart
+- [x] `TASK-025` Permohonan table: filter, sort, pagination, search
+- [x] `TASK-026` Permohonan detail: view, update status, upload jawaban, catatan
+- [x] `TASK-027` SLA reminder cron job (vercel cron or node-cron)
+- [x] `TASK-028` Laporan generator: PDF (react-pdf) + Excel (exceljs)
+- [x] `TASK-029` User management CRUD (super_admin only)
 
 ### Phase 4 — Polish & Deploy
 
-- [ ] `TASK-030` Error boundaries & loading skeletons for all pages
-- [ ] `TASK-031` SEO: metadata, sitemap.xml, robots.txt, Open Graph
-- [ ] `TASK-032` Accessibility audit (WCAG 2.1 AA)
-- [ ] `TASK-033` Nginx config: SSL (Let's Encrypt), rate limiting, gzip
-- [ ] `TASK-034` GitHub Actions CI/CD pipeline
-- [ ] `TASK-035` Uptime Kuma monitoring setup
+- [x] `TASK-030` Error boundaries & loading skeletons for all pages
+- [x] `TASK-031` SEO: metadata, sitemap.xml, robots.txt, Open Graph
+- [x] `TASK-032` Accessibility audit (WCAG 2.1 AA)
+- [x] `TASK-033` Nginx config: SSL (Let's Encrypt), rate limiting, gzip
+- [x] `TASK-034` GitHub Actions CI/CD pipeline
+- [x] `TASK-035` Uptime Kuma monitoring setup
 
 ---
 
@@ -526,5 +526,18 @@ When given a task, agent MUST follow this workflow:
 
 ---
 
-_Last updated: Juni 2025 — v1.0_
+_Last updated: 15 Juni 2026 — v1.0_
 _Reference: PRD PPID BAZNAS Kab. Cianjur v1.0_
+
+## graphify
+
+This project has a knowledge graph at graphify-out/ with god nodes, community structure, and cross-file relationships.
+
+When the user types `/graphify`, invoke the `skill` tool with `skill: "graphify"` before doing anything else.
+
+Rules:
+- For codebase questions, first run `graphify query "<question>"` when graphify-out/graph.json exists. Use `graphify path "<A>" "<B>"` for relationships and `graphify explain "<concept>"` for focused concepts. These return a scoped subgraph, usually much smaller than GRAPH_REPORT.md or raw grep output.
+- Dirty graphify-out/ files are expected after hooks or incremental updates; dirty graph files are not a reason to skip graphify. Only skip graphify if the task is about stale or incorrect graph output, or the user explicitly says not to use it.
+- If graphify-out/wiki/index.md exists, use it for broad navigation instead of raw source browsing.
+- Read graphify-out/GRAPH_REPORT.md only for broad architecture review or when query/path/explain do not surface enough context.
+- After modifying code, run `graphify update .` to keep the graph current (AST-only, no API cost).

@@ -1,0 +1,506 @@
+{
+  "id": "adbe0f7a-f2c9-4776-9eb4-086b9bd303aa",
+  "prevId": "00000000-0000-0000-0000-000000000000",
+  "version": "7",
+  "dialect": "postgresql",
+  "tables": {
+    "public.pengaduan": {
+      "name": "pengaduan",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "nomor_tiket": {
+          "name": "nomor_tiket",
+          "type": "varchar(20)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "nama": {
+          "name": "nama",
+          "type": "varchar(100)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "email": {
+          "name": "email",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "nomor_telepon": {
+          "name": "nomor_telepon",
+          "type": "varchar(15)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "kategori": {
+          "name": "kategori",
+          "type": "kategori_pengaduan",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "subjek": {
+          "name": "subjek",
+          "type": "varchar(200)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "isi_pengaduan": {
+          "name": "isi_pengaduan",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "lampiran": {
+          "name": "lampiran",
+          "type": "varchar(500)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "status": {
+          "name": "status",
+          "type": "status_pengaduan",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'pending'"
+        },
+        "catatan_admin": {
+          "name": "catatan_admin",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "pengaduan_nomor_tiket_unique": {
+          "name": "pengaduan_nomor_tiket_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "nomor_tiket"
+          ]
+        }
+      }
+    },
+    "public.permohonan": {
+      "name": "permohonan",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "nomor_tiket": {
+          "name": "nomor_tiket",
+          "type": "varchar(20)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "nama_pemohon": {
+          "name": "nama_pemohon",
+          "type": "varchar(100)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "email": {
+          "name": "email",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "nomor_identitas": {
+          "name": "nomor_identitas",
+          "type": "varchar(16)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "alamat": {
+          "name": "alamat",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "nomor_telepon": {
+          "name": "nomor_telepon",
+          "type": "varchar(15)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "tujuan_permohonan": {
+          "name": "tujuan_permohonan",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "rincian_informasi": {
+          "name": "rincian_informasi",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "kategori_informasi": {
+          "name": "kategori_informasi",
+          "type": "kategori_informasi",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "cara_mendapatkan": {
+          "name": "cara_mendapatkan",
+          "type": "cara_mendapatkan",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'email'"
+        },
+        "lampiran_identitas": {
+          "name": "lampiran_identitas",
+          "type": "varchar(500)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "status": {
+          "name": "status",
+          "type": "status_permohonan",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'pending'"
+        },
+        "catatan_admin": {
+          "name": "catatan_admin",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "lampiran_jawaban": {
+          "name": "lampiran_jawaban",
+          "type": "varchar(500)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "tanggal_diterima": {
+          "name": "tanggal_diterima",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "tanggal_deadline": {
+          "name": "tanggal_deadline",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "tanggal_perpanjangan": {
+          "name": "tanggal_perpanjangan",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "tanggal_selesai": {
+          "name": "tanggal_selesai",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "admin_id": {
+          "name": "admin_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "permohonan_admin_id_admin_users_id_fk": {
+          "name": "permohonan_admin_id_admin_users_id_fk",
+          "tableFrom": "permohonan",
+          "tableTo": "admin_users",
+          "columnsFrom": [
+            "admin_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "permohonan_nomor_tiket_unique": {
+          "name": "permohonan_nomor_tiket_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "nomor_tiket"
+          ]
+        }
+      }
+    },
+    "public.riwayat_permohonan": {
+      "name": "riwayat_permohonan",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "permohonan_id": {
+          "name": "permohonan_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "status_dari": {
+          "name": "status_dari",
+          "type": "status_permohonan",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "status_ke": {
+          "name": "status_ke",
+          "type": "status_permohonan",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "catatan": {
+          "name": "catatan",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "user_id": {
+          "name": "user_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "riwayat_permohonan_permohonan_id_permohonan_id_fk": {
+          "name": "riwayat_permohonan_permohonan_id_permohonan_id_fk",
+          "tableFrom": "riwayat_permohonan",
+          "tableTo": "permohonan",
+          "columnsFrom": [
+            "permohonan_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "riwayat_permohonan_user_id_admin_users_id_fk": {
+          "name": "riwayat_permohonan_user_id_admin_users_id_fk",
+          "tableFrom": "riwayat_permohonan",
+          "tableTo": "admin_users",
+          "columnsFrom": [
+            "user_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "public.admin_users": {
+      "name": "admin_users",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "name": {
+          "name": "name",
+          "type": "varchar(100)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "email": {
+          "name": "email",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "password": {
+          "name": "password",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "role": {
+          "name": "role",
+          "type": "user_role",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'operator'"
+        },
+        "is_active": {
+          "name": "is_active",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "default": true
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "admin_users_email_unique": {
+          "name": "admin_users_email_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "email"
+          ]
+        }
+      }
+    }
+  },
+  "enums": {
+    "public.kategori_pengaduan": {
+      "name": "kategori_pengaduan",
+      "schema": "public",
+      "values": [
+        "pelayanan",
+        "penyaluran_zis",
+        "keberatan",
+        "lainnya"
+      ]
+    },
+    "public.status_pengaduan": {
+      "name": "status_pengaduan",
+      "schema": "public",
+      "values": [
+        "pending",
+        "diproses",
+        "ditindaklanjuti",
+        "selesai"
+      ]
+    },
+    "public.cara_mendapatkan": {
+      "name": "cara_mendapatkan",
+      "schema": "public",
+      "values": [
+        "email",
+        "langsung",
+        "pos"
+      ]
+    },
+    "public.kategori_informasi": {
+      "name": "kategori_informasi",
+      "schema": "public",
+      "values": [
+        "berkala",
+        "serta_merta",
+        "setiap_saat"
+      ]
+    },
+    "public.status_permohonan": {
+      "name": "status_permohonan",
+      "schema": "public",
+      "values": [
+        "pending",
+        "diterima",
+        "klarifikasi",
+        "diproses",
+        "selesai",
+        "ditolak",
+        "perpanjangan",
+        "keberatan"
+      ]
+    },
+    "public.user_role": {
+      "name": "user_role",
+      "schema": "public",
+      "values": [
+        "super_admin",
+        "admin_ppid",
+        "operator"
+      ]
+    }
+  },
+  "schemas": {},
+  "_meta": {
+    "columns": {},
+    "schemas": {},
+    "tables": {}
+  }
+}
